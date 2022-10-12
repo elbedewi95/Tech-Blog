@@ -75,3 +75,11 @@ const { User, Post, Comment} = require('../models');
                     res.status(500).json(err)
                 }
             });
+
+            router.get('/new', (req, res) => {
+                res.render('add-post', {
+                    loggedIn: req.session.loggedIn 
+                })
+            })
+            
+            module.exports = router;
