@@ -77,3 +77,31 @@ const { User, Post, Comment} = require('../models');
             }
             });
     
+            //redirect to homepage if logged in
+            router.get('/login', (req, res) => {
+                if (req.session.loggedIn) {
+                    res.redirect('/');
+                    return;
+                }
+            
+                res.render('login');
+            });
+            
+            //redirect to homepage after signup
+            router.get('/signup', (req, res) => {
+                if (req.session.loggedIn) {
+                    res.redirect('/');
+                    return;
+                }
+            
+                res.render('signup');
+            });
+            
+            
+            router.get('*', (req, res) => {
+                res.status(404).send("Oops!! What brings you here? It's Empty!");
+                
+            })
+            
+            
+            module.exports = router;
