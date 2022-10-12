@@ -32,6 +32,8 @@ const { User, Post, Comment} = require('../models');
         })
 
         router.get('/edit/:id', async (req, res) => {
+            try{
+            
             let onePost = await Post.findOne({
                     where: {
                         id: req.params.id
@@ -68,5 +70,8 @@ const { User, Post, Comment} = require('../models');
                 res.render('edit-post', {
                     post,
                     loggedIn: req.session.loggedIn 
-                });
+                });}
+                catch(err){
+                    res.status(500).json(err)
+                }
             });
