@@ -31,4 +31,42 @@ const { User, Post, Comment} = require('../models');
             }
         })
 
-        
+        router.get('/edit/:id', async (req, res) => {
+            let onePost = await Post.findOne({
+                    where: {
+                        id: req.params.id
+                    },
+                    attributes: [
+                        'id',
+                        'title',
+                        'content',
+                        'created_at'
+                    ],
+                    include: [{
+                            model: Comment,
+                            attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+                            include: {
+                                model: User,
+                                attributes: ['username']
+                            }
+                        },
+                        {
+                            model: User,
+                            attributes: ['username']
+                        }
+                    ]
+                })
+                if (!onePost) {
+                    res.status(404).json({
+                        message: 'Uh Oh! This post does not exist!'
+                    });
+                    return;
+                }
+
+                const post = onePost.get({plain: true});
+    
+                res.render('edit-post', {
+                    post,
+                    loggedIn: req.session.loggedIn 
+                });
+            });
